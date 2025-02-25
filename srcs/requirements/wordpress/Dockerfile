@@ -8,8 +8,8 @@ RUN chmod +x /auto_config.sh
 
 WORKDIR /var/www/wordpress
 
-RUN mkdir -p /run/php  
+RUN mkdir -p /run/php
 
 ENTRYPOINT [ "bash", "/auto_config.sh" ]
 
-CMD ["php-fpm7.4", "-F", "-R"]
+CMD ["php-fpm7.4", "-F"]
