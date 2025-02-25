@@ -12,4 +12,4 @@ RUN mkdir -p /run/php
 
 ENTRYPOINT [ "bash", "/auto_config.sh" ]
 
-CMD ["php-fpm7.4", "-F"]
+CMD ["php-fpm7.4", "-F", "-R"]

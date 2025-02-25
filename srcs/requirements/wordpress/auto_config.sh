@@ -2,6 +2,7 @@
 
 wordpress_admin_password=$(cat /run/secrets/wordpress_admin_password)
 wordpress_new_user_password=$(cat /run/secrets/wordpress_new_user_password)
+db_password=$(cat /run/secrets/db_password)
 
 sleep 10
 
@@ -23,9 +24,7 @@ wp core download --allow-root
 
 mv /var/www/wordpress/wp-config-sample.php  /var/www/wordpress/wp-config.php
 
-add_filter('xmlrpc_enabled', '__return_false');
-
-wp config create --allow-root --dbname=${MYSQL_DB} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost="mariadb:3306"
+wp config create --allow-root --dbname=${MYSQL_DB} --dbuser=${MYSQL_USER} --dbpass=${db_password} --dbhost="mariadb:3306"
 
 
 wp core install --allow-root --url=${DOMAIN_NAME} --title="${WORDPRESS_TITLE}" --admin_user=${WORDPRESS_ADMIN} --admin_password=${wordpress_admin_password} --admin_email=${WORDPRESS_ADMIN_EMAIL} --skip-email
@@ -37,7 +36,7 @@ wp config set --allow-root DB_NAME ${MYSQL_DB}
 
 wp config set --allow-root DB_USER ${MYSQL_USER}
 
-wp config set --allow-root DB_PASSWORD ${MYSQL_PASSWORD}
+wp config set --allow-root DB_PASSWORD ${db_password}
 
 wp config set --allow-root DB_HOST "mariadb:3306"
 

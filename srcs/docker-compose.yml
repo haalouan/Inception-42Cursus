@@ -41,6 +41,7 @@ services:
     secrets:
       - wordpress_admin_password
       - wordpress_new_user_password
+      -  db_password
     networks:
       - inception
     restart: always
