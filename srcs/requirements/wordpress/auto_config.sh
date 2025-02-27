@@ -1,7 +1,7 @@
 #!/bin/bash
 
 wordpress_admin_password=$(cat /run/secrets/wordpress_admin_password)
-wordpress_new_user_password=$(cat /run/secrets/wordpress_new_user_password)
+wordpress_user_password=$(cat /run/secrets/wordpress_user_password)
 db_password=$(cat /run/secrets/db_password)
 
 sleep 10
@@ -24,7 +24,7 @@ wp config create --allow-root --dbname=${MYSQL_DB} --dbuser=${MYSQL_USER} --dbpa
 
 wp core install --allow-root --url=${DOMAIN_NAME} --title="${WORDPRESS_TITLE}" --admin_user=${WORDPRESS_ADMIN} --admin_password=${wordpress_admin_password} --admin_email=${WORDPRESS_ADMIN_EMAIL} --skip-email
 
-wp user create ${NEW_WORDPRESS_USER} ${NEW_WORDPRESS_USER_EMAIL} --user_pass=${wordpress_new_user_password} --role=${NEW_WORDPRESS_USER_ROLE} --allow-root
+wp user create ${WORDPRESS_USER} ${WORDPRESS_USER_EMAIL} --user_pass=${wordpress_user_password} --role=${WORDPRESS_USER_ROLE} --allow-root
 
 sed -i '36 s/\/run\/php\/php7.4-fpm.sock/9000/' /etc/php/7.4/fpm/pool.d/www.conf
 
