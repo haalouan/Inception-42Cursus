@@ -12,6 +12,7 @@ services:
       - db_root_password
     networks:
       - inception
+    image: mariadb
     restart: always
 
   nginx:
@@ -27,6 +28,7 @@ services:
       - .env
     networks:
       - inception
+    image: nginx
     restart: always
 
   wordpress:
@@ -36,6 +38,7 @@ services:
       - mariadb
     volumes:
       - wordpress:/var/www/wordpress
+    image: wordpress
     env_file:
       - .env
     secrets:
