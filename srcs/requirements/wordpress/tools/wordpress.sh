@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [[ ! -f /run/secrets/wordpress_admin_password || \
+      ! -f /run/secrets/wordpress_user_password || \
+      ! -f /run/secrets/db_password ]]; then
+  echo "Error: One or more required secret files are missing!" >&2
+  exit 1
+fi
+
 wordpress_admin_password=$(cat /run/secrets/wordpress_admin_password)
 wordpress_user_password=$(cat /run/secrets/wordpress_user_password)
 db_password=$(cat /run/secrets/db_password)
@@ -26,7 +33,7 @@ wp core install --allow-root --url=${DOMAIN_NAME} --title="${WORDPRESS_TITLE}" -
 
 wp user create ${WORDPRESS_USER} ${WORDPRESS_USER_EMAIL} --user_pass=${wordpress_user_password} --role=${WORDPRESS_USER_ROLE} --allow-root
 
-sed -i '36 s/\/run\/php\/php7.4-fpm.sock/9000/' /etc/php/7.4/fpm/pool.d/www.conf
+sed -i 's|listen = /run/php/php7.4-fpm.sock|listen = 9000|' /etc/php/7.4/fpm/pool.d/www.conf
 
 chown -R www-data:www-data /var/www/wordpress
 
@@ -34,4 +41,4 @@ chmod -R 775 /var/www/wordpress
 
 service php7.4-fpm reload 
 
-exec "$@"
+exec php7.4-fpm -F
